@@ -1,0 +1,32 @@
+Exercise 3:
+Q. For each of the following pairs of scanf format strings, indicate whether or not the two strings are equivalent. If they're not, show how they can be distinguished.
+a. "%d"       versus " %d"          -> No difference
+b. "%d-%d-%d" versus "%d -%d -%d"   -> 
+c. "%f"       versus "%f "          -> Difference (expects a white space character)
+d. "%f,%f"    versus "%f, %f"       -> No difference
+A. When it comes to different types of formats:
+a. "%d" expects for an integer that can be a number, a sign (plus or minus). " %d" does not really have that difference with the former expression.
+b. "%d-%d-%d" expects a number of format "<num>-<num>-<num>", so when we enter a number like "123 -567 -894", there can be problems. scanf first checks for the number "123" and sees it matches the pattern but when it encounters the whitespace character, it cannot do anything so it puts it back for the next scanf to check.
+c. "%f" expects a number, a sign (plus or minus) and decimal point or e (exponent). "%f " expects the same as the former pattern but it also expects a whitespace character so unless "\n" or "\t" or any other character is entered, it does not complete the input operation.
+d. "%f,%f" expects a floating point number, a comma and another floating point number. Similar to the pattern in part a, the latter one "%f, %f" expects the same without having any issue.
+
+Exercise 4:
+Q. Suppose that we call scanf as follows:
+    scanf("%d%f%d", &i, &x, &j);
+    If the user enters:
+    10.3 5 6
+    what will be the value of i, x and j after the call? (Assume that i and j are int variables and x is a float variable)
+A. [Expected] Since the pattern scanf is looking for is int, then float and finally another int and when we enter the given values, the following may happen:
+    scanf encounters 10 followed by a . which is not used to describe an integer, so it is put back and 10 is stored in i. .3 is checked and since a whitespace is encountered, it stops the store .3 in x. Finally, 5 and a whitespace is encountered, so 5 is stored in j.
+    i = 10, x = 0.3, j = 5
+    [Actual] As expected.
+
+Exercise 5:
+Q. Suppose that we call scanf as follows:
+    scanf("%f%d%f", &x, &i, &y);
+    If the user enters:
+    12.3 45.6 789
+    what will be the values of x, i and y after the call? (Assume that x and y are float variables and i is an int variable).
+A. [Expected] Similar to the process described in Exercise 4, the following values will be stored:
+    x = 12.3, i = 45, y = 0.6
+    [Actual] As expected.
