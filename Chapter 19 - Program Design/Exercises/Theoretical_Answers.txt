@@ -1,0 +1,16 @@
+Exercise 4:
+Q.  a. Write an implementation of the Stack type, assuming that Stack is a structure containing a fixed-length array.
+    b. Redo the Stack type, this time using a linked-list representation instead of an array. (Show both stack.h and stack.c.)
+A.  Part a has been done when reading the chapter. It is located in the stack directory--specifically the `../stack/fixed_size/`--where the stack is implemented using the fixed size array.
+    Part b has been done as well. It too is located in the stack directory (../stack/linked_list/).
+
+Exercise 6:
+Q.  a. Add a peak function to stackaADT.c. This function will have a parameter of type Stack. When called, it returns the top item on the stack but doesn't modify the stack.
+    b. Repeat part (a), modifying stackADT2.c this time.
+    c. Repeat part (a), modifying stackADT3.c this time.
+A.  The function is added as an extension in:
+    a. in `../stack/fixed_size/`
+    b. in `../stack/dynamic_size/`
+    c. in `../stack/linked_list/`
+
+

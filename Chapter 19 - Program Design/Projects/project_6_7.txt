@@ -1,0 +1,7 @@
+Project 6:
+Q. Modify Programming Project 5 so that the items in a queue are stored in a dynamically allocated array whose length is passed to the create function.
+A. The given question is already done in Exercise 3(a). It contains the full queue ADT--with wrap around functionality--as well as a client file (exercise_3) which contains the implementation of the ADT.
+
+Project 7:
+Q. Modify Programming Project 5 so that the items in a queue are stored in a linked list (see Exercise 3(b)).
+A. The given question is already done in Exercise 3(b). It contains the queue ADT implemented using linked list. The implementation of the queue ADT is shown in exercise_3.c file which contains two different queueADT implementations.
