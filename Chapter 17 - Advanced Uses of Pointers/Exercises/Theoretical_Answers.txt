@@ -1,0 +1,69 @@
+Exercise 5:
+Q. Suppose that f and p are declared as follows:
+      struct {
+        union {
+          char a, b;
+          int c;
+        } d;
+        int e[5];
+      } f, *p = &f;
+  Which of the following statements are legal?
+    a. p->b = ' ';
+    b. p->e[3] = 10;
+    c. (*p).d.a = '*';
+    d. p->d->c = 20;
+A. Based on the provided structre, I'd say that:
+    a. is not legal as it is accessing member b of union d without specifying. The correct and legal way would probably be `p->d.b = ' ';`
+    b. is probably legal as it would go as: `p->*(e+3) = 10;` which is similar to accesing a integer value.
+    c. is legal as `(*p)` will "indirect" the pointer p, making it act like a normal structure variable. We can then use the dot (.) operator to access the members without any issue.
+    d. is probably not legal as the arrow operator (->) is used to access member of a pointer variable. While p is a pointer variable, d--which is a union--is not a pointer to the union. Since d is not a pointer, we cannot use the arrow operator to access the member c of the union. The correct way would be: `p->d.c = 20;`
+    After checking the ouput, it was as expected. But for b, `p->*(e+3)` is not correct way to visualize the array operation. It will be roguhly equivalent to: `*((p->e) + 3)`
+
+Exercise 7:
+Q. The following loop is supposed to delete all nodes from a linked list and release the memory that they occupy. Unfortunately, the loop is incorrect. Explain what's wrong with it and show how to fix the bug. 
+      for (p = first; p != NULL; p = p->next) {
+        free(p);
+      }
+A. Looking at the code, one of the flaw at the first observation is that, once free is called inside the for loop block, the memory allocated by the pointer p (which is assumed to be a pointer to a structure of members `int num` and `struct linked_list *next`) will be released by the program. After the for block is executed, the third expression described in the for statement, i.e. p = p->next is executed. This is illegal as it is trying to access a memory block that is released by the program which will probably send a SIGSEGV (segfault). Since p is being assigned the address pointed to by first, one potential solution can be:
+    ```C
+    for (; first != NULL;) {
+      p = first;
+      first = first->next;
+      free(p);
+    }
+    ```
+    This program will run as follows:
+      1. p will be assigned the address of pointed to by first. 
+      2. first will be assigned the address pointed to by the member next of the structure variable.
+      3. p will be freed, without any issue of the program accessing the "illegal" address in the heap.
+
+Exercise 9:
+Q. True or false: If x is a structure and a is a member of that structure, then (&x)->a is the same as x.a. Justify your answer.
+A. True. Given that x is a structure variable with a as its member, we can access structure in both ways as described in the question. As &x gives the address of the structure variable, we can use the arrow operator (->) to access the members of a pointer to a structure. We use the dot (.) operator to access the members of a structure variable. 
+
+Exercise 10:
+Q. Modify the print_part function of Section 16.2 so that its parameter is a pointer to a part structure. Use the operator in your answer.
+A. The function definition in #26 of Chapter 16 notes is:
+      ```C 
+      void print_part (struct part p) {
+          printf("Part number: %d\n", p.number);
+          printf("Part name: %s\n", p.name);
+          printf("Quantity on hand: %d\n", p.on_hand);
+      }
+      ```
+  To modify the function parameter such that it takes a pointer to the structure part and print its details, we can do so as:
+      ```C 
+      void print_part (struct part *p) {
+        printf("Part number: %d\n", p->number);
+        printf("Part name: %s\n", p->name);
+        printf("Quantity on hand: %d\n", p->on_hand);
+      }
+      ```
+  To call the function given that a variable of type struct part is defined, we can do so as:
+      ```C 
+      ...
+      struct part p1;
+      ...
+      print_part(&p1);
+      ```
+
