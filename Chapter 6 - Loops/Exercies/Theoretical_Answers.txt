@@ -1,0 +1,14 @@
+Exercise 4:
+Q. Which of the following statements is not equivalent to the other two (assuming that the loop bodies are the same)?
+    a. for (i = 0; i < 10; i++) ...
+    b. for (i = 0; i < 10; ++i) ...
+    c. for (i = 0; i++ < 10; ) ...
+A. Since the third expression of the for loop is run only once the end of loop body is reached, it does not affect if we use the post increment operator or the pre increment operator. It would only make sense that the third statement is not equivalent to the other two. Even though it seems like same as other two statements as i++ only increments i on the later statements and uses the current value of i when the condition is being checked. Okay, so the third one is indeed not equivalent since the value of i is incremented before the loop body is executed.
+
+Exercise 5:
+Q. Which one of the following statements is not equivalent to the other two (assuming that the loop bodies are the same)?
+    a. while (i < 10) {...}
+    b. for (; i < 10; ) {...}
+    c. do {...} while (i < 10);
+A. The last statement is not equivalent to the other two since the do loop will at least execute once. If the value of i is 10 or more, the while loop and the for loop will not execute, but the do loop will.
+
