@@ -1,0 +1,4 @@
+.DS_Store
+
+# ignore any unwanted object files
+*.o
