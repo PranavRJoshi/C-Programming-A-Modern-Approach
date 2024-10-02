@@ -1,0 +1,168 @@
+Exercise 1:
+Q. The following function calls supposedly write a singe new-line character, but some are incorrect. Identify which calls don't work and explain why.
+    a. printf("%c", '\n');        g. putchar('\n');
+    b. printf("%c", "\n");        h. putchar("\n");
+    c. printf("%s", '\n');        i. puts('\n');
+    d. printf("%s", "\n");        j. puts("\n");
+    e. printf('\n');              k. puts("");
+    f. printf("\n");
+A. Before we move onto checking the correct functions, i'll first put the function signature for printf, putchar, and puts:
+    printf's signature: int	 printf(const char * __restrict, ...) __printflike(1, 2);
+    putchar's signature: int putchar(int c);
+    puts's signature: puts(const char *s);
+  Now, this is my expected results with their reasonings:
+    a. This function call should work as intended--it should print out a new-line character--as %c format specifier expects a character and any character inside a single quote, '\n' in this example, is a character (note that 'ab' is not a character as it has a and b inside the single quote).
+    b. This function call should not work, since the format specifier expects a character (%c) but was given a string. Although it may seem like "\n" is just a character, but since the new-line character is wrapped around double quotes, there is an extra character at the end, the null character (\0).
+    c. This function call is a bit tricky, as the format specifier requires a string (%s), but a character is given ('\n'). If I had to guess, this should not work.
+    d. This function call should work as well since the format specifier requires a string and a string is provided.
+    e. This function call should not work, as the first argument of printf requires a const char * (ignoring __restrict as I'm not aware of what it does), instead a character is passed as the first argument.
+    f. This function will work--should be obvious.
+    g. This function will work as putchar expects a character and a character is given to it. If you're confused as to how it works even though putchar expects an int type as it's argument, remember that a character is indeed an interger, of 8 bits (Recall how the character 'A' has ASCII code of 65, ' ' has ASCII code of 32, and so on).  
+    h. This function call should not work as the argument provided to putchar is a string. Since putchar only takes integer as an argument, it will not work as "\n" not only has the new-line character, but a null character after it as well.
+    i. This function call will not work as puts require a const char * as its argument, but a character was provided.
+    j. This function call will work as a string (char *) is provided. NOTE: This does work, but puts also adds a new-line character after the string has been printed, so it probably prints two new-line character.
+    k. This function call will work as described in above. Since puts automatically adds a new-line character at the end, this will work too.
+  Now, after testing:
+    a. Works as intended.
+    b. Printed a random character instead of a new-line character.
+    c. Segmentation Fault.
+    d. Works as intended.
+    e. Segmentation Fault.
+    f. Works as intented.
+    g. Works as intended.
+    h. Printed a random character instead of a new-line character.
+    i. Segmentation Fault.
+    j. Works as intented and described it's caveat.
+    k. Works as intended.
+
+Exercise 2:
+Q. Suppose that p has been declared as follows:
+    char *p = "abc";
+  Which of the following function calls are legal? Show the output produced by each legal call, and explain why the others are illegal.
+    a. putchar(p);
+    b. putchar(*p);
+    c. puts(p);
+    d. puts(*p);
+A. Before testing it out, I assume the following effects happen during the function call. This is under the fact that p is a pointer to a character variable that points to a string literal abc and the null character (\0). When the indirection operator is applied, it returns the first character in the string literal, i.e. a.
+    a. Since we are supplying putchar with a pointer to a character, it does not have the type int, rather it has the type char *. So this should be illegal.
+    b. As *p returns a character, more precisely, it returns a, which is 97 in ASCII value, this function call should be legal.
+    c. Since puts expects a const char *, and p is a char * variable, this function call should be legal.
+    d. *p, as described earlier, returns a character, not a pointer to a character, so this function call should be illegal.
+  Now, after testing:
+    a. Printed a random character.
+    b. Works as intended.
+    c. Works as intended.
+    d. Segmentation Fault.
+
+Exercise 3:
+Q. Suppose that we call scanf as follows:
+    scanf("%d%s%d", &i, s, &j);
+  If the user enters 12abc34 56def78, what will be the values of i, s, and j after the call? (Assume that i and j are int variables and s is an array of characters.)
+A. From my initial assumption, the call to scanf will work as follows:
+    -> it reads 1, 2, and a. Since a is not a digit, scanf puts a back in the input stream and stores 12 into i
+    -> it reads a, b, c, 3, 4, and ' ' (space). Since space is encountered and there is no space in the format specifier, the scanf will stop reading more characters from the input stream (even though there are more characters in the input string) and stores abc34 in the string s.
+  After testing:
+    I forgot that scanf will ignore all the leading spaces. Since the space between 4 and 5 in the input is present, and scanf will stop reading for s when it encounters a space and when it reads for the next variable, i.e. j, it first encounters the space that was left behind by the last scan of scanf. As stated, scanf will ignore the leading space until it finds a non-space character--digit in the case--and stores it in the variable.
+
+Exercise 7:
+Q. Suppose that str is an array of characters. Which one of the following statements is not equivalent to the other three?
+    a. *str = 0;
+    b. str[0] = '\0';
+    c. strcpy(str, "");
+    d. strcat(str, "");
+A. The last option, i.e. option d is the not equivalent to other three. As str is an array of character, str will be a pointer to the first character in the array (str[0]), and storing 0 is equivalent to storing the null character (the ASCII code for the null character is 0). Option b works in similar manner as option a. For option c, as str copies "", which is an empty string literal that has one character--the null character--even though the string is empty (see #8 of Chapter's note), so strcpy will copy a string with only a null character to str. For option d, if there is already some characters in the string str, then strcat will append the null character at the end of the str array.
+
+Exercise 8:
+Q. What will be the value of the string str after the following statements have been executed?
+    strcpy(str, "tire-bouchon");
+    strcpy(&str[4], "d-or-wi");
+    strcat(str, "red?");
+A. From the inital observation of the code, it seems like the sequence of execution will be like this:
+    -> when the first strcpy is called, the character array (string) str is modified by adding the string tire-bouchon in the string.
+    -> when the second strcpy is called, since the first agrument--a char * which stores the string in the second argument--is a pointer to the element 4 of the character array str, the string is presumably modified starting from that position. From the previous call to strcpy, str[4] holds the '-' character, and &str[4] gives the pointer/address to that character. Since strcpy is a function that is defined in string.h header, the implementation might be diffferent. The one I could think of is:
+      -> The strcpy function might only modify the characters that is the length of the src (the second argument), which is of length 7 in this case. This either modifies the array and will have "tired-or-win". It's also possible that the null character at the end of src will be copied to the dst (the first argument). In this case, the array will have the string stored as "tired-or-wi"
+    -> the strcat will append the "red?" string to the str function. The final output i could think of is: "tired-or-wired?"
+  The expected output matched the program's output.
+
+Exercise 9:
+Q. What will be the value of the string s1 after the following statements have been executed?
+    strcpy(s1, "computer");
+    strcpy(s2, "science");
+    if (strcmp(s1, s2) < 0)
+      strcat(s1, s2);
+    else
+      strcat(s2, s1);
+    s1[strlen(s1) - 6] = '\0';
+A. The flow of the program will be as follows:
+    -> the first call to strcpy will assign the string "computer" to s1.
+    -> the second call to strcpy will assign the string "science" to s2.
+    -> the strcmp function is called with first argument as s1 ("computer"), and the second as s2 ("science"). Since the character 'c' is numerically less than the character 's' (in ASCII code), the result of strcmp will be less than 0. So the block inside the if statement is executed.
+    -> the call to strcat will append the content of s2 into the string s1, effectively making the string s1 contain "computerscience"
+    -> the last statemnt has the use of strlen(s1) which will return 15. 15 - 6 will result in 9. So, the effective result will be s[9] = '\0'. As the element 9 points to the character 'c' and replaces it will the null character.
+    If s1 is printed, it should output "computers"
+  The expected output matched the program's output.
+
+Exercise 10:
+Q. The function supposedly creates an identical copy of a string. What's wrong with the function?
+    char *duplicate (const char *p) {
+      char *q;
+
+      strcpy(q, p);
+      return q;
+    }
+A. Although the code seems to work properly, there are indeed a few issues with the program fragment. Firstly, the pointer variable q is declared but not initialized. This means that q can currently point to any object in the memory. Even worse, q is assigned the string containing in p, so we don't know where q is modifying the object at. Also, since q is a pointer variable declared inside the function *duplicate, the duration of the variable is automatic, i.e. after the function block ends, the variable is no longer available.
+  After making a porgram, the warning generated were regarding the uninitialized variable q that was on the line `return q` as the line `char *q` is a declaration, not an initialization. When executing the code, i observed the "trace trap" or SIGTRAP error.
+
+Exercise 14:
+Q. What does the following program print?
+    #include <stdio.h>
+
+    int main (void) {
+      char s[] = "Hsjodi", *p;
+
+      for (p = s; *p; p++) {
+        --*p;
+      }
+      puts(s);
+      return 0;
+    }
+A. The following program is a bit tricky, in a sense that the expression --*p is not something that I'm familiar with. Apart from that, the following sequences will occur during the program execution:
+    -> s holds the string "Hsjodi", along with a null character. Also, a character pointer variable p is declared.
+    -> In the for loop, the first expression will assign a pointer to the first element in s to the pointer variable p. the second expression--which is the conditional expression--is just *p, which will be 0 only when it encounters the null character '\0', and terminates from the for loop, and the third expression, which increments the pointer variable p which will point to another element in the string s.
+      -> Inside the loop, only one operation is performed, which is the --*p. From what i can guess, as -- is right associative and will check for an lvalue, but since *p is after the -- operator, this will decrement the value stored in *p. (Although this does not seem to work like we used the *p++, where p is incremented and then only indirection operator is applied.) So, if *p holds the character 'H', the operation will modify the character to 'G'. In similar manner, the other characters in the strings will be 'r', 'i', 'n', 'c', and 'h'. 
+    -> puts will output the string "Grinch".
+  The expected output matched the program's output.
+
+Exercise 15:
+Q. Let f be the following function:
+    int f (char *s, char *t) {
+      char *p1, *p2;
+
+      for (p1 = s; *p1; p1++) {
+        for (p2 = t; *p2; p2++) {
+          if (*p1 == *p2) {
+            break;
+          }
+        }
+        if (*p2 == '\0') {
+          break;
+        }
+      }
+      return p1 - s;
+    }
+  a. What is the value of f("abcd", "babc")?
+  b. What is the value of f("abcd", "bcd")?
+  c. In general, what value does f return when passed two strings s and t?
+A. Lets start with the third question. For c, the following things will happen when f is invoked,
+    -> the pointer to character variable p1 and p2 points to s and t respectively.
+    -> s is the expression for outer loop and t is the expression for inner loop.
+    -> both loops will not terminate unless the null character is encountered (break is not taken into consideration)
+    -> the inner loop only has one conditional statement. If the object that is pointed by p1 is same as the object that is pointed by p2, the flow will break out of the inner loop. If not, the loop continues till it encounters the null character.
+    -> before re-iterating the outer loop, the program checks if *p2 is a null character, if yes, then it will break out of outer loop.
+    -> if not, the loop is re-iterated. this will make p point to the next element in the string s. and the steps are re-done.
+  In essence, what this program does is, it checks the characters in the string s, to the characters in t. If the character in s is present is present in t, then the program checks for the next character in the string and in the string t. If the program fails to find the character in the string t, then the loop terminates and the difference of the p1 - s is returned. This difference represents the characters that are present in the string t. For instance, if s contains "abc", and t contains "cbs", then the function will return 0 as it fails to encounter the character 'a' in the string t. If the string s contains "abc" and string t contains "cxa", then the function will return 1 as it can locate c, but not x--which terminates the loop from the outer loop's if statement.
+  Moving on to the previous two questions:
+    a. The function will locate a, b, and c from the string "babc", but fails to locate d. Before the return statement is executed, p1 will be a pointer that points to d. So p1 - s will be 3.
+    b. The function will not locate a in the string "bcd". So, the function will return 0.
+
+
