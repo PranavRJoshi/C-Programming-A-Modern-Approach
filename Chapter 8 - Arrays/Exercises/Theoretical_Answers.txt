@@ -1,0 +1,16 @@
+Exercise 1:
+Q. We discussed using the expression sizeof(a) / sizeof(a[0]) to calculate the number of elements in an array. The expression sizeof(a) / sizeof(t), where t is the type of a's elements, would also work, but it's considered an inferior technique. Why?
+A. Using sizeof(a) / sizeof(a[0]) is used to get the total number of elements in the array. It does not consider the type into account when determing the length of the array, which makes it portable as well. But using sizeof(a) / sizeof(t), where t is the type of a's element is inferior as the code reader has to find the type of t in the code, and find the declaration of a to verify if the type of the two variables match, which makes readability more difficult.
+
+Exercise 2:
+Q. The Q&A section shows how to use a letter as an array subscript. Describe how to use a digit (in character form) as a subscript.
+A. We can do so using the following code fragment:
+
+  ```C
+  int number_count[10];
+
+  number_count[ch - '0'] = 10;
+  ```
+
+  This considers that ch is a character variable, and given that ch lies in the range '0' to '9', which has the ASCII range of 48 (for '0') to 57 (for '9'), we can use it as an array subscript.
+
