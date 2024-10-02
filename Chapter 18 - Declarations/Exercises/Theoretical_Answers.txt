@@ -1,0 +1,135 @@
+Exercise 1:
+Q. For each of the following declarations, identify the storage class, type qualifiers, type specifiers, declarators, and initializers.
+    a. static char **lookup(int level);
+    b. volatile unsigned long io_flags;
+    c. extern char *file_name[MAX_FILES], path[];
+    d. static const char token_buf[] = "";
+A. The following properties are avaiable for:
+    a. What is the variable lookup: it is a function which returns a pointer to a pointer to a type of static char. The following properties are:
+      1. storge class: static (function has internal linkage)
+      2. type qualifiers: none
+      3. type specifiers: char 
+      4. declarators: **lookup(int level)--function which takes in an int parameter as argument, and returns a pointer to a pointer.
+      5. initializers: none
+    b. What is the variable io_flags: it is a variable of:
+      1. storage class: none
+      2. type qualifiers: volatile
+      3. type specifiers: unsigned long
+      4. delcarators: io_flags
+      5. initializers: none
+    c. What is the variable file_name and path:
+      1. storage class: extern (static storage duration)
+      2. type qualifiers: none
+      3. type specifiers: char 
+      4. declarators: *file_name[MAX_FILE]--an array of pointers of size MAX_FILE, and path is (wrongly) defined as an array of unknown size without any initialization.
+      5. initializers: none
+    d. What is the variable token_buf:
+      1. storage class: static 
+      2. type qualifiers: const
+      3. type specifiers: char 
+      4. declarators: token_buf[]
+      5. initializers: ""--an empty string
+
+Exercise 2:
+Q. Answer each of the following questions with auto extern, register, and/or static.
+    a. Which storage class is used primarily to indicate that a variable can be shared by several files?
+    b. Suppose that a variable x is to be shared by several functions in one file but hidden from functions in other files. Which storage class should x be declared to have.
+    c. Which storage class can affect the storage duration of a varible.
+A. For 
+    a. the keyword `extern` can be used to share a variable or function with multiple files. (Functions are implicitly defined to be of extern storage class)
+    b. x should have a file scope as well as internal linkage. This can be achieved using the `static` keyword.
+    c. Inside the block, using the keyword `static` can make sure that the variable has static storage duration rather than automatic storage duration. Likewise, using `extern` can achieve the static storage duration inside the block. Using `auto` outside the function and in global scope is illegal. `register` is has no effect on the storage duration.
+
+Exercise 3:
+Q. List the storage duration (static or automatic), scope (block or file), and linkage (internal, external, or none) of each variable and aparamter in the following file:
+    extern float a;
+
+    void f(register double b)
+    {
+      static int c;
+      auto char d;
+    }
+A. The following order of properties of variable are in the form (variable_name -> storage class, scope, linkage)
+    1. a -> static, file, ? (probably external)
+    2. b -> automatic, block, none
+    3. c -> static, block, none
+    4. d -> automatic, block, none
+
+Exercise 4:
+Q. Let f be the following function. What will be the value of f(10) if f has never been called before? What will be the value of f(10) if f has been called five times previously?
+    int f(int i)
+    {
+      static int j = 0;
+      return i * j++;
+    }
+A. In the scenario that f has never been called previously and the first call is f(10), the following value is returned by f:
+    10 * 0, and after that, j is incremented (post increment).
+    
+    After one call, j will be 1, the second call changes j from 1 to 2, and in the first call, j would have the value 4, and if f(10) is called, the value of j will be 10 * 4 (j will be five after the the function returns) -> 40.
+    Actual output: As predicted.
+
+Exercise 5:
+Q. State whether each of the following statements is true or false. Justify each answer.
+    a. Every variable with static storage duration has file scope. 
+    b. Every variable declared inside a function has no linkage.
+    c. Every variable with internal linkage has static storage duration.
+    d. Every parameter has block scope.
+A. For
+    a. False. A variable declared inside a function with the keyword `static` has static storage duration, but no file scope.
+    b. False. A variable declared inside a function with the keyword `extern` may have internal or external linkage. If the variable has been previously defined as static, then it has internal linkage, else it has external linkage.
+    c. True. Usually, variables declared outside any function with the keyword `static` has internal storage duration. When we define variable in this manner, the variable will have static storage duration.
+    d. True. A parameter will have block scope. Also, it is illegal to specify static/extern/auto to parameters. register has block scope.
+
+Exercise 6:
+Q. The following function is supposed to print an error message. Each message is preceded by an integer, indicating the number of times the function has been called. Unfortunately, the function always displys 1 as the number of the error message. Locate the error and show how to fix it without making any changes outside the function. 
+    void print_error(const char *message)
+    {
+      int n = 1;
+      printf("Error %d: %s\n", n++, message);
+    }
+A. The error with this code fragment is that n is a variable that has automatic storage duration, i.e. n is defined only when the function is called. After the function reaches the enclosing braces (}), the variable n does not exist, hence after calling the function another time, the variable will hold 1.
+
+    To make the code behave as stated in question, we need to declare the storage class of variable n as `static`. 
+
+Exercise 7:
+Q. Suppose that we declare x to be a const object. Which one of the following statements about x is *false*?
+    a. If x is of type int, it can be used as the value of a case label in a switch statement.
+    b. The compiler will check that no assignment is made to x.
+    c. x is subject to the same scope rules as variables.
+    d. x can be of any type. 
+A. For
+    a. False. While x is type-qualified to be a "const", it does not mean that x is now a constant expression. It merely means that x is stored in a memory location that can be "read-only". This is why, x cannot be used in a constant expression. #66 of chapter's note gives a better explaination.
+    b. True. variables qualified as "const" can only be initialized, not assigned.
+    c. True. when a variable is declared const inside a block, the variable will have block scope. If the variable which is defined outside any functions, it will have a file scope.
+    d. True. const is a type qualifier, which is one of the declaration specifiers (storage class, type qualifiers, and type specifiers) when declaring a variable. 
+
+Exercise 8:
+Q. Write a complete description of the type of x as specified by each of the following declarations.
+    a. char (*x[10])(int);
+    b. int (*x(int))[5];
+    c. float *(*x(void))(int);
+    d. void (*x(int, void (*)(int)))(int);
+A. For
+    a. x is an array of pointers of size 10 that has elements of type functions pointer that takes in an integer as an argument and returns a character.
+    b. x is a function that takes in integer as an argument and returns a pointer to an array of type integer of size 5.
+    c. x is a function that takes in no argument and returns a pointer to a function that takes an integer and returns a pointer of type float.
+    d. x is a function which takes in two arguments: an integer and a pointer to a function that has integer as an argument and returns void, returns a pointer to a function that takes an integer as an argument and returns void.
+
+    The actual output resembles the properties as predicted.
+
+Exercise 14:
+Q. Which kinds of variables cannot be initialized?
+    a. Array variables
+    b. Enumeration variables
+    c. Structure variables
+    d. Union variables
+    e. None of the above
+A. It may seem like the answer is (e), as we can initialize all the types of variables mentioned. But, in C99, Variable-Length Arrays (VLAs) cannot be initialized, it can only be declared. Once the size of the array is determined, the array can then be assigned values. I'm not entirely sure about this, but structures having flexible array members may face some errors during initialization.
+
+Exercise 15:
+Q. Which property of a variable determines whether or not it has a default initial value?
+    a. Storage duration
+    b. Scope
+    c. Linkage
+    d. Type
+A. Scope and Linakge (as mentioned in the #64 of Chapter's notes) are for compiler and linker respectively. Scope defines the range in which the variable can be used--either block or file, whereas, Linkage defines the variables which can be shared among files (external), used in the only file defined (internal) or none (blocks/auto). Type has no relevance as it defines the type specification of the variable. Storage duration, on the other hand, can be used to determine if the variable has a default value. As mentioned in #46(2) of Chapter's notes, a variable of storage class static has the default value zero.
