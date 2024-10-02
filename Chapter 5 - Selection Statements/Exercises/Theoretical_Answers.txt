@@ -1,0 +1,65 @@
+Exercise 5:
+Q. Is the following if statement legal?
+   if (n >= 1 <= 10) 
+       printf("n is between 1 and 10\n");
+   If so, what does it do when n is equal to 0?
+A. Yes, the given if statement is legal. The expression for the if statement can be broken down into sub-expressions as follows: ((n >= 1) <= 10). When n is 0, i.e. ((0 >= 1) <= 10) -> (0 <= 10) -> 1. This is because the result from relational operators can be 1 (meaning true) or 0 (meaning false). Also, the string being printed by printf is misleading as it does not check if n lies between 1 and 10.
+
+Exercise 6:
+Q. Is the following if statement legal?
+   if (n == 1 - 10) 
+       printf("n is between 1 and 10\n");
+   If so, what does it do when n is equal to 5.
+A. Yes, the given statement is legal. The expression for the if statement can be paranthesized as: (n == (1 - 10)). When n is 5, i.e. (5 == (1 - 10)) -> (5 == -9) -> 0. Similar to relational operators, equality operator also results in either 0 (false) or 1 (true). Also, the string in the printf is misleading.
+
+Exercise 7:
+Q. What does the following statement print if i has the value 17? What does it print if i has the value -17?
+   printf("%d\n", i >= 0 ? i : -i);
+A. When i has the value of 17, i >= 0 holds true, so %d gets the value of i (17). When the value of i is -17. i >= 0 does not hold true, so %d gets the value of -i (-(-17)). 
+
+Exercise 8:
+Q. The following if statement is unnecessarily complicated. Simplify it as much as possible. (Hint: The entire statement can be replaced by a single assignment.)
+    if (age >= 13)
+        if (age <= 19)
+            teenager = true;
+        else
+            teenager = false;
+    else if (age < 13)
+        teenager = false;
+A. We can simply this if-else conditonal statement with the help of conditional expression. We can simply rewrite the logic as: teenager = ((age < 13 || age > 19) ? false : true);
+
+Exercise 9:
+Q. Are the following if statements equivalent? If not, why not?
+Program A:
+    if (score >= 90)
+        printf("A");
+    else if (score >= 80)
+        printf("B");
+    else if (score >= 70)
+        printf("C");
+    else if (score >= 60)
+        printf("D");
+    else
+        printf("F");
+Program B:
+    if (score < 60) 
+        printf("F");
+    else if (score < 70)
+        printf("D");
+    else if (score < 80)
+        printf("C");
+    else if (score < 90)
+        printf("B");
+    else
+        printf("A");
+A. The given two programs are identical. When the score is less than 60, both programs prints F. When the score is in the range of 60-69, both will print D and so on.
+
+Exercise 10:
+Q. What output does the following program fragment produce? (Assume that i is an integer variable.)
+    i = 1;
+    switch (i % 3) {
+        case 0: printf("zero");
+        case 1: printf("one");
+        case 2: printf("two");
+    }
+A. i % 3 -> 1 % 3 will result in 1 as the remainder. so it does not satisfy case 0, but does satisfy case 1. Because there is no break statement present in case 1, the control goes to following case, i.e. case 2 in this example (fall through), so the resultant output will be "onetwo".
