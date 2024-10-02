@@ -1,0 +1,97 @@
+Exercise 3:
+Q. Which of the following are not legal types in C?
+    a. short unsigned int
+    b. short float
+    c. long double
+    d. unsigned long
+A. Only short float is not a legal type in C. short unsigned int is the same as unsigned short int, long double is a new type introduced in C99, and unsigned long is a short-hand form for the type unsigned long int.
+
+Exercise 4:
+Q. If c is a variable of type char, which one of the following statements is illegal?
+    a. i += c;  /* i has type int */
+    b. c = 2 * c - 1;
+    c. putchar(c);
+    d. printf(c);
+A. Statements a, b, and c are legal statements, whereas statement d is illegal. since char is basically an 8-bit integer, c treats the variable c as an integer, so the ascii value of the character stored in the variable is added to the variable i. The second statement is also valid statement for the reasons stated for the first statement. putchar function puts a character in the standard output. But the last statement is invalid as printf requires the conversion specification inside a string as the first argument to represent the variable. The legal statement would be: printf("%c", c);
+
+Exercise 5:
+Q. Which one of the following is not a legal way to write the number 65? (Assume that the character set is ASCII)
+    a. 'A'
+    b. 0b1000001
+    c. 0101
+    d. 0x41
+A. Since 'A' translates to 65 when the character is represented as an integer (65 is the ASCII code to represent the character A), it is a legal way to write the number 65. The second value is not legal since it represents an octal number but b is not a legal number in octal constant. 0101 is an octal number which converts to 65 in decimal, so it too is legal. 0x41 is a hex number which converts to 65 in decimal, hence it also is a legal way to write the number 65.
+
+Exercise 6:
+Q. For each of the following items of data, specify which one of the types char, short, int, or long is the smallest one guaranteed to be large enough to store the item.
+    a. Days in a month
+    b. Days in a year
+    c. Minutes in a day
+    d. Seconds in a day
+A. The days in a month ranges from 28-31, so it can be represented in a char variable (although not recommened) as the variable is basically an 8-bit integer. It is not recommened as the character representation of the values from 0 to 31 is not a valid character but special characters that includes null character, tabs, line feed, form feed and so on. It would be best to represent the days using the short type. The days in a year is 365 or 366 (leap year), so it does not require any more than a short variable. There are 1440 minutes in a day, so it can also be represented in a short variable. There are 86400 seconds in a day, so short and int are not enough to represent all the values (unless it is a 64-bit machine which can represent all the numbers in an int variable). So the preferred type should be a long variable.
+
+Exercise 7:
+Q. For each of the following character escapes, give the equivalent octal escape. (Assume that the character set is ASCII.) You may wish to consult appendix E, which lists the numerical codes for ASCII characters.
+    a. \b
+    b. \n
+    c. \r
+    d. \t
+A. To represent the character escapes in octal, we need to first see the corresponding ASCII value of the character escapes. The value should be preceded by the \. So the corresponding representation in octal will be:
+    a. \010 or \10
+    b. \012 or \12
+    c. \015 or \15
+    d. \011 or \11
+
+Exercise 8:
+Q. Repeat Exercise 7, but give the eqivalent hexadecimal escape.
+A. To represent the character escapes in hex, we need to see the corresponding ASCII value of the character escapes. Also, the value should be preceded by \x.
+    a. \xa
+    b. \xc
+    c. \xf
+    d. \xb
+
+Exercise 9:
+Q. Suppose that i and j are variables of type int. What is the type of the expression i / j + 'a'?
+A. Since i and j are int and 'a' is a character, integer promotion occurs which promotes the type of char to int. i / j will not be a rather, rather the decimal point and the value after the decimal point (if any) gets truncated, but the result of the entire expression will be an integer.
+
+Exercise 10:
+Q. Suppose that i is a variable of type int, j is a variable of type long, and k is variable of type unsigned int. What is the type of the expression i + (int) j * k?
+A. The expression broken down using braces turns into (i + (((int) j) * k)). First the cast operation is performed that converts the variable j from long to int. Now, integer promotion is applied to the variable j, making it an unsigned int. This would result in the multiplication to result a value of unsigned int. When the result is added to i, firstly, i is promoted to unsigned int and the type of the entire expression will be unsigned int.
+
+Exercise 11:
+Q. Suppose that i is a variable of type int, f is a variable of type float, and d is a variable of type double. What is the type of the expression i * f / d?
+A. The expression has the same precedence of operators in use, so the compiler uses the rules of associativity to break down this expression into sub-expression. The expression is broken down as: ((i * f) / d). Since i is of type int and f is a float, the integer promotion is applied which results the sub-expression to result in floating type. When it is divided to variable d--which is of type double--promotion occurs which promotes the float type to double type. So, the resulting type of the entire expression will be of type double.
+
+Exercise 12:
+Q. Suppose that i is a variable of type int, f is a variable of type float, and d is a variable of type double. Explain what conversions take place during the execution of the following statement:
+    d = i + f;
+A. The expression (i + f) will have the type float as i is promoted to type float. As = is too an assignment operator, the type of the resulting value is promoted to the one with highest precedence, i.e. of type double.
+
+Exercise 13:
+Q. Assume that a program contains the following declarations:
+    char c = '\1';
+    short s = 2;
+    int i = -3;
+    long m = 5;
+    float f = 6.5f;
+    double d = 7.5;
+   Give the value and the type of each of the expression listed below:
+    a. c * i
+    b. s + m
+    c. f / c
+    d. d / s
+    e. f - d
+    f. (int) f
+A. For now, the value of c will be converted to the value of integer 1 (since \1 is an ASCII octal representation that results 1 in decimal value as well). Moving on to individual cases:
+    a. In c * i, c is promoted to type int due to integer promotion, which results in the value of -3.
+    b. In s + m, s is promoted to type long, and the resulting value will be 7 of type long.
+    c. In f / c, c is converted to type float, and the resulting value will be 6.500000 of type float.
+    d. In d / s, s is converted to type double, and the resulting value will be 7.500000000000 of type double.
+    e. In f - d, f is converted to type double, and the resulting value will be 1.000000000000 of type double.
+    f. In (int) f, f is explicitly converted to type int, and the resulting value will be 6, and .5 will be truncated.
+
+Exercise 14:
+Q. Does the following statement always compute the fractional part of f correctly (assuming that f and frac_part are float variables)?
+    frac_part = f - (int) f;
+   If not, what's the problem?
+A. The expression f - (int) f will result in the fractional part of f since (int) f will truncate the decimal values after the decimal point. But before the subtraction happens, the value of (int) f is converted to f, so the result should not have a problem. But, if the value of f exceeds the value which is out of range in the int type, there may be some problem when it is converted to int.
