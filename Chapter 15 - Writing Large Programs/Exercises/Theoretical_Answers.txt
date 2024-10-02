@@ -1,0 +1,61 @@
+Exercise 1:
+Q. Section 15.1 listed several advantages of dividing a program into multiple source files.
+    a. Describe several advantages.
+    b. Describe some disadvantages.
+A. There were 3 advantages that were described in the book (see #5 of Chapter's Notes). Apart from them:
+    
+    a. Some of the advantages that we can get from dividing the program into multiple files is that:
+        1. Writing program in one file is possible, but it makes the entire code clustered.
+        2. Documenting the entire code base for a large program that is written in a single file can be a tedious job.
+        3. When working on a team, there is a high possibility that conflict might arise due to multiple people working on the same file.
+        4. When modifying the single file, it takes quite a time to compile the code, as the entire file needs to be recompiled, even though only a portion of the code was modified.
+        5. There is a chance that the external variables that might be in use in the program can be misused by a function that is defined in the file, which should not modify the variable.
+        6. If the program utilizes many macros (simple or parameterized), which is only used by certain functions, it is best advised to split the code into multiple files.
+
+    b. Some of the disadvantages that we can get from dividing the program into multiple files is that:
+        1. It gets frustating keeping tracks of all the variables that the program uses very quickly.
+        2. If the code is not documented properly (either in header file or in the source file), it becomes a nightmare to keep track of how the program is working.
+        3. Working with the build system can be tedious (as described in chapter on how make in itself is a tool that takes time to master). Even if we have other modern build systems like project file or cmake, it's not going to change the fact that we need to be very careful when making a proper build system.
+        4. We should keep proper track of the variables that are declared or initialized in different source files (as described in #20 of Chapter's Notes).
+        5. Protecting headers is crucial when working with multiple files. If we fail to do so, there is a chance that we might include the same header twice in the program which isn't noticed by the compiler, but can cause undefined behavior.
+
+Exercise 2:
+Q. Which of the following should *not* be put in a header file? Why not?
+    a. Function prototypes
+    b. Function definitions
+    c. Macro definitions
+    d. Type definitions
+A. Assuming that the header is protected:
+    a. This should be put in a header file.
+    b. This should not be put in a header file.
+    c. This should be put in a header file.
+    d. This should be put in a header file.
+
+Exercise 5:
+Q. Suppose that a program consists of three source file--main.c, f1.c, and f2.c--plus two header files, f1.h amd f2.h. All three source files include the f1.h, but only f1.c and f2.c include f2.h. Write a makefile for this program, assuming that the compiler is gcc and that the executable file is to be named demo.
+A. The makefile structure would look something like this:
+    demo: main.o f1.o f2.o 
+      gcc -o demo main.o f1.o f2.o
+
+    main.o: main.c f1.h 
+      gcc -c main.c 
+
+    f1.o: f1.c f1.h f2.h 
+      gcc -c f1.c 
+
+    f2.o: f2.c f1.h f2.h 
+      gcc -c f2.c 
+
+Exercise 6:
+Q. The following questions refer to the program described in Exercise 5.
+    a. Which files need to be compiled when the program is built for the first time?
+    b. If f1.c is changed after the program has been built, which files need to be recompiled?
+    c. If f1.h is changed after the program has been built, which files need to be recompiled?
+    d. If f2.h is changed after the program has been built, which files need to be recompiled?
+A. For: 
+    a. All the files need to be compiled when the program is built for the first time. 
+    b. Since f1.c is a dependency for demo, f1.o, these files need to be recompiled.
+    c. Since f1.h is a dependency for demo, f1.o, and f2.o, all of these files need to be recompiled. 
+    d. Since f2.h is a dependency for main, f1.o, and f2.o, these files need to be recompiled.
+
+
