@@ -1,0 +1,29 @@
+Exercise 6:
+Q. Why is it not a good idea for an identifier to contain more than one adjacent underscore (as in current____balance, for example)?
+A. It is probably a good idea to use a sufficient amount of underscore as the compiler usually stores the first few characters of an identifier (31 characters in C89 and 63 characters in C99). Also, while taking external linkage into account, only the first six characters are significant in C89 while it does not care for the case sensitivity (31 significant characters in C99 while taking case sensitivity into account).
+
+Exercise 7:
+Q. Which of the following are keywords in C?
+    a. for
+    b. If
+    c. main
+    d. printf
+    e. while
+A. If we take case sensitivity into account, `If` is not considered a keyword (`if` is). And `main` is not a keyword, it is the name of the function that must be present in a C program.
+
+Exercise 8:
+Q. How many tokens are there in the following statement?
+    answer=(3*q-p*p)/3;
+A.  There are a total of 14 tokens in the given statement.
+    tokens: answer, =, (, 3, *, q, -, p, *, p, ), /, 3, ;
+    identifier: answer, q, p
+    punctuation: (, *, -, /, )
+    constants: 3
+
+Exercise 9:
+Q. Insert spaces between the tokens in Exercise 8 to make the statement easier to read.
+A. answer = (3 * q - p * p) / 3;
+
+Exercise 10:
+Q. In the dweight.c program (Section 2.4), which spaces are essential?
+A. In the program, the spaces are essential to separate out the directives from the main program as the directives are usually of one line.
