@@ -1,0 +1,125 @@
+Exercise 7:
+Q. Suppose that the function f has the following definition:
+    int f (int a, int b) {...}
+
+    Which of the following statements are legal? (Assume that i has type int and x has type double.)
+
+    a) i = f(83, 12);
+    b) x = f(83, 12);
+    c) i = f(3.15, 9.28);
+    d) x = f(3.15, 9.28);
+    e) f(83, 12);
+A. All of the statements above are legal. Option a is the ideal form the function can have. Option b goes in steps. Since f returns an integer, the value returned is implicitly converted to a type of double (since x is of type double). Option c goes as follows: the function expects two int arguments but two double arguments were provided. Given that the function f is already defined, the compiler knows that the function takes two int arguments, so it implicitly converts the two double arguments into integer arguments (see #20 of Chapter's notes). Option d is a mixture of option b and option c. Option e is a form of expression statement (see #13 of Chapter's notes).
+
+Exercise 8:
+Q. Which of the following would be valid prototypes for a function that returns nothing and has one double parameter?
+    a) void f (double x);
+    b) void f (double);
+    c) void f (x);
+    d) f (double x);
+A. In the following options. option c is illegal since there is no type specified for x in the function protoype, also, even though option d is legal (pre C99), but if we were to have the function f return void, it would not work as intended since the compiler defaults the return type of the function which does not have a return type specified to int.
+
+Exercise 9:
+Q. What will be the output of the following program?
+    #include <stdio.h>
+
+    void swap (int a, int b);
+
+    int main (void) {
+      int i = 1, j = 2;
+
+      swap(i, j);
+      printf("i = %d, j = %d\n", i, j);
+      return 0;
+    }
+
+    void swap (int a, int b) {
+      int temp = a;
+      a = b;
+      b = temp;
+    }
+A. The output will be:
+    i = 1, j = 2
+  This is because arguments are passed by values (see #18 of Chapter's notes). This means that when swap is called, the function parameter a and b copies the value of i and j. Even though swapping is done correctly inside the function body, the values stored in i and j are unaffected. Even after the function call, the variable i and j holds 1 and 2 respectively. One way to change it is by the use of pointers which we'll learn in the later chapters.
+
+Exercise 14:
+Q. The following function is supposed to return true if any element of the array a has the value 0 and false if all elements are nonzero. Sadly, it contains an error. Find the error and show how to fix it:
+    bool has_zero (int a[], int n) {
+      int i;
+
+      for (i = 0; i < n; i++)
+        if (a[i] == 0)
+          return true;
+        else
+          return false;
+    }
+A. The error in the given code is in the logic inside the for loop. When a[i] is checked and found that it's value is non-zero, it simply returns false without checking other elements of the array. This should not happen and the value of other elements should be checked as there might be a possibility of having zero in other elements. The correct code would look like:
+    bool has_zero (int a[], int n) {
+      int i;
+
+      for (i = 0; i < n; i++)
+        if (a[i] == 0)
+          return true;
+      return false;
+    }
+  The for loop only checks if the element is zero, if all the elements are nonzero, then the condition is never met, hence it goes out of the loop body and simply returns false.
+
+Exercise 15:
+Q. The following (rather confusing) function finds the median of three numbers. Rewrite the function so that it has just one return statement.
+    double median (double x, double y, double z) {
+      if (x <= y)
+        if (y <= z) return y;
+        else if (x <= z) return z;
+        else return x;
+      if (z <= y) return y;
+      if (x <= z) return x;
+      return z;
+    }
+A. Using only one return statement (and using braces since i prefer that style), the code would look like:
+    double median (double x, double y, double z) {
+      double median_value;
+
+      if (x <= y) {
+        if (y <= z) {
+          median_value = y;
+        } else if (x <= z) {
+          median_value = z;
+        } else {
+          median_value = x;
+        }
+      } else if (z <= y) {
+        median_value = y;
+      } else if (x <= z) {
+        median_value = x;
+      } else {
+        median_value = z;
+      }
+
+      return median_value;
+    }
+  The logic of the code is preserved as much as possible, but the last return statemnt from the question cannot just be translated to a variable, but it still will hold true.
+
+Exercise 16:
+Q. Condense the fact function in the same way we condensed power.
+A. The updated code is:
+    int fact (int n) {
+      return n <= 1 ? 1 : n * fact(n-1);
+    }
+
+Exercise 17:
+Q. Rewrite the fact function so that it's no longer recursive.
+A. The fact function without recursion is:
+    int fact (int n) {
+      int fact_result = 1;
+      
+      if (n <= 1) {
+        return fact_result;
+      } else {
+        for (int i = n; i > 0; i--) {
+          fact_result = fact_result * i;
+        }
+        return fact_result;
+      }
+    }
+
+
