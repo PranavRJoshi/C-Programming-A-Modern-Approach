@@ -1,0 +1,28 @@
+Exercise 1:
+Q. If i is a variable and p points to i, which of the following expressions are aliases for i?
+    a. *p     c. *&p      e. *i       g. *&i
+    b. &p     d. &*p      f. &i       h. &*i
+A.  a. *p  -> since p points to i, and * is an indirection operator, *p is an alias for i.
+    b. &p  -> p is a integer pointer variable, and & is an address operator, so &p gives the address of p.
+    c. *&p -> &p gives the address of p first, * then gives the value stored at that address. Since p stores the address of the object it points to, this expression gives the address of i (the object pointed to by p)
+    d. &*p -> *p first gives the value of the object it is pointing to--the value stored in i--and the & operator gives the address of the value, which is the address of i.
+    e. *i  -> is not a valid expression as i is not a pointer variable. So this expression is illegal. The compiler treats the * as a multiplication operator instead of the indirection operator.
+    f. &i  -> provides the address of the variable i.
+    g. *&i -> is an alias of i. Since &i gives the address of the variable i, and the * operator acts as the indirection operator, it essentially gives the value stored in i.
+    h. &*i -> is not a valid expression as i is not a pointer variable. So this expression is illegal too. The compiler first checks the * operator first and--i not being a pointer variable--treats the * as the multiplication operator. The & operator is not even reached.
+
+Exercise 2:
+Q. If i is an int variable and p and q are pointers to int, which of the following assignments are legal?
+    a. p = i;       d. p = &q;        g. p = *q;
+    b. *p = &i;     e. p = *&q;       h. *p = q;
+    c. &p = q;      f. p = q;         i. *p = *q;
+A.  a. p = i;   -> this expression is legal (but wrong) as the expression tries to store the value of i into the pointer variable p.
+    b. *p = &i; -> this expression is legal if it is a declaration, i.e. `int *p = &i`. But it is wrong if it is an statement in itself (see #27 of Chapter's notes). The expression tries to store the address of i into the object that p points to, not to p itself.
+    c. &p = q;  -> this expression is illegal as &p is not an lvalue--an object stored in memory--but rather a memory address.
+    d. p = &q;  -> this expression is illegal as q itself is a pointer variable. To further understand this, we need to understand the &i is of type (int *), which is the address of a variable that points to an integer, while &p and &q is of type (int **), which is the address of a variable that points to a pointer of type int.
+    e. p = *&q; -> the expression can be broken into sub-expressions. First &q gives the address of the variable that points to a pointer. The * operator gives the object that is stored in the address, which essentially is the same as saying that assign the integer pointer that is already assigned to q into the integer pointer variable p.
+    f. p = q;   -> this expression is assigns the pointer to the object stored in q to the pointer variable p.
+    g. p = *q;  -> *q is gives the object pointed to by the address which is stored in q. This expression does not store the pointer to an integer variable as *q results in an integer value itself, while p expects an pointer to an integer variable.
+    h. *p = q;  -> *p expects an integer variable, (or an integer value, but is discouraged as using p only can lead to undefined behavior). But since q holds the pointer to an object that stores integer, it does not work as intended.
+    i. *p = *q; -> this expression stores the object that is pointed to by q into the object that is pointed to by p.
+
